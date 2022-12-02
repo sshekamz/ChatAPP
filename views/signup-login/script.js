@@ -18,7 +18,7 @@ function signup(event) {
             console.log(response.data);
             if (response.status === 201) {
                 alert('Successfully signed up');
-                //window.location.href='./login.html'
+                window.location.href='./login.html'
             }
             
         }).catch(error => {
@@ -44,7 +44,8 @@ function login(e) {
                 localStorage.setItem('userId',response.data.userId);
                 localStorage.setItem('localMsg', '[]');
                 window.location.href='./chat.html'
-            } 
+            }
+
         }).catch(error => {
             console.log(error);
             if (error.response.status === 401) {

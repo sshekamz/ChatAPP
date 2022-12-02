@@ -34,3 +34,29 @@ exports.signup = (req, res) => {
             });
         }).catch(err=>console.log(err))
 };
+exports.login = (req, res) => {
+    const { email, password } = req.body;
+
+    User.findAll({ where: { email: email } })
+        .then(user => {
+            if (user.length > 0) {
+                bycrypt.compare(password, user[0].password, function (err, response) {
+                    if (err) {
+                        console.log(err);
+                    }
+                    if (response) {
+                        console.log(JSON.stringify(user));
+                        const jwtToken = generateAccessToken(user[0].id);
+                        res.status(200).json({ token: jwtToken, userId: user[0].id, name: user[0].name, success: true, message: 'successfully logged in' });
+                    }
+                    else {
+                        return res.status(401).json({ success: false, message: 'password do not match' });
+                    }
+                })
+            } else {
+                return res.status(404).json({ success: false, message: 'user does not exist' });
+            }
+        }).catch(err=>{
+            console.log(err);
+        })
+}
